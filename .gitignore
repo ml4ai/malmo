@@ -215,3 +215,13 @@ Schemas/xs3p.xsl
 Minecraft/run/config/malmomodCLIENT.cfg
 Minecraft/Minecraft_Client.launch
 
+# Automatically generated files
+Malmo/test/PythonTests/malmoutils.py
+Minecraft/.minecraft/
+Minecraft/.minecraftserver/
+Minecraft/run/config/
+Minecraft/run/saves/
+Minecraft/run/usercache.json
+Minecraft/run/usernamecache.json
+Minecraft/src/main/resources/schemas.index
+Minecraft/src/main/resources/version.properties
