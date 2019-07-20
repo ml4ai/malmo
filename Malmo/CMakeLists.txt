@@ -18,5 +18,7 @@
 # ------------------------------------------------------------------------------------------------
 
 add_subdirectory( src )
-add_subdirectory( test )
+if (PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+  add_subdirectory( test )
+endif()
 add_subdirectory( samples )
