@@ -48,14 +48,6 @@ set( INCLUDE_CSHARP      ON  CACHE BOOL ${INCLUDE_CSHARP_DESC} )
 set( INCLUDE_JAVA        ON  CACHE BOOL ${INCLUDE_JAVA_DESC} )
 set( INCLUDE_PYTHON      ON  CACHE BOOL ${INCLUDE_PYTHON_DESC} )
 set( STATIC_BOOST        ON CACHE BOOL ${STATIC_BOOST_DESC} )
-
-if( INCLUDE_PYTHON )
-  set( USE_PYTHON_VERSIONS_DESC "Specifies which version of Python to build Malmo with Python bindings" )
-  set( USE_PYTHON_VERSIONS 3.6 CACHE STRING ${USE_PYTHON_VERSIONS_DESC} )
-  set( BOOST_PYTHON_NAME_DESC "Specifies which Boost Python module to build Malmo with" )
-  execute_process(COMMAND python3 -c "import sys; print('python' + str(sys.version_info[0]) + str(sys.version_info[1]), end='')" OUTPUT_VARIABLE BOOST_PYTHON_NAME )
-endif()
-
 set( WARNINGS_AS_ERRORS OFF )
 
 # ------------------- Detect the system -----------------------
@@ -102,6 +94,7 @@ set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake )
 SET(Boost_ADDITIONAL_VERSIONS "1.65" "1.65.0")
 SET(Boost_ADDITIONAL_VERSIONS "1.66" "1.66.0")
 SET(Boost_ADDITIONAL_VERSIONS "1.67" "1.67.0")
+SET(Boost_ADDITIONAL_VERSIONS "1.69" "1.69.0")
 
 SET(BOOST_PYTHON_MODULE_NAME "python")
 if ( USE_PYTHON_VERSIONS VERSION_GREATER 3 )
