@@ -29,6 +29,8 @@ list( GET MALMO_VERSION_LIST 0 MALMO_VERSION_MAJOR )
 list( GET MALMO_VERSION_LIST 1 MALMO_VERSION_MINOR )
 list( GET MALMO_VERSION_LIST 2 MALMO_VERSION_REVISION )
 set( MALMO_VERSION ${MALMO_VERSION_MAJOR}.${MALMO_VERSION_MINOR}.${MALMO_VERSION_REVISION} )
+set( ENV{MALMO_XSD_PATH} "${PROJECT_SOURCE_DIR}/Schemas" )
+message( "MALMO_XSD_PATH set to ${PROJECT_SOURCE_DIR}/Schemas" )
 
 message("Configure MALMO_VERSION at ${MALMO_VERSION}")
 
@@ -44,12 +46,21 @@ set( STATIC_BOOST_DESC        "Specifies whether to link Malmo statically agains
 set( BUILD_MOD           ON  CACHE BOOL ${BUILD_MOD_DESC} )
 set( BUILD_DOCUMENTATION ON  CACHE BOOL ${BUILD_DOCUMENTATION_DESC} )
 set( INCLUDE_ALE         OFF CACHE BOOL ${INCLUDE_ALE_DESC} )
-set( INCLUDE_CSHARP      ON  CACHE BOOL ${INCLUDE_CSHARP_DESC} )
+set( INCLUDE_CSHARP      OFF  CACHE BOOL ${INCLUDE_CSHARP_DESC} )
 set( INCLUDE_JAVA        ON  CACHE BOOL ${INCLUDE_JAVA_DESC} )
 set( INCLUDE_PYTHON      ON  CACHE BOOL ${INCLUDE_PYTHON_DESC} )
 set( STATIC_BOOST        ON CACHE BOOL ${STATIC_BOOST_DESC} )
 set( WARNINGS_AS_ERRORS OFF )
 
+if( INCLUDE_PYTHON )
+  set( USE_PYTHON_VERSIONS_DESC "Specifies which version of Python to build Malmo with Python bindings" )
+  set( USE_PYTHON_VERSIONS 3.6 CACHE STRING ${USE_PYTHON_VERSIONS_DESC} )
+  set( BOOST_PYTHON_NAME_DESC "Specifies which Boost Python module to build Malmo with" )
+  execute_process(
+    COMMAND python3 -c "import sys; print('python' + str(sys.version_info[0]) + str(sys.version_info[1]), end='')" 
+    OUTPUT_VARIABLE BOOST_PYTHON_NAME 
+  )
+endif()
 # ------------------- Detect the system -----------------------
 
 if( APPLE )
@@ -99,18 +110,22 @@ SET(Boost_ADDITIONAL_VERSIONS "1.68" "1.68.0")
 SET(Boost_ADDITIONAL_VERSIONS "1.69" "1.69.0")
 SET(Boost_ADDITIONAL_VERSIONS "1.70" "1.70.0")
 
-SET(BOOST_PYTHON_MODULE_NAME "python")
-if ( USE_PYTHON_VERSIONS VERSION_GREATER 3 )
+SET(BOOST_PYTHON_MODULE_NAME "python" 
+  CACHE STRING "Boost Python library name.  For MacPorts Boost 1.66, this is 'python3'"
+)
+if (Boost_VERSION VERSION_GREATER 1.67 )
   SET( BOOST_PYTHON_MODULE_NAME ${BOOST_PYTHON_NAME} )
 endif()
 
 if( WIN32 )
   SET(Boost_USE_STATIC_LIBS ON)
-  find_package( Boost COMPONENTS chrono date_time filesystem iostreams program_options ${BOOST_PYTHON_MODULE_NAME} regex system thread REQUIRED )
+  find_package( Boost COMPONENTS chrono date_time filesystem iostreams
+    program_options ${BOOST_PYTHON_MODULE_NAME} regex system thread REQUIRED )
   add_definitions(-DBOOST_ALL_NO_LIB=1)  # Turn off auto-linking, creates problems when linking boost statically
 else()
   SET(Boost_USE_STATIC_LIBS ${STATIC_BOOST})
-  find_package( Boost COMPONENTS chrono date_time filesystem iostreams program_options ${BOOST_PYTHON_MODULE_NAME} regex system thread REQUIRED )
+  find_package( Boost COMPONENTS chrono date_time filesystem iostreams
+    program_options ${BOOST_PYTHON_MODULE_NAME} regex system thread REQUIRED )
   set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
   find_package( Threads REQUIRED )
 endif()
