@@ -123,7 +123,7 @@ if( NOT WIN32 )
   set( MALMO_LINK_LIBRARIES ${MALMO_LINK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} )
 endif()
 
-target_link_libraries( Malmo ${MALMO_LINK_LIBRARIES} )
+target_link_libraries( Malmo PRIVATE ${MALMO_LINK_LIBRARIES} )
 
 # -------------- Install the library in Cpp_Examples --------------
 
