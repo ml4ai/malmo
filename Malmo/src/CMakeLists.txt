@@ -17,126 +17,119 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 # ------------------------------------------------------------------------------------------------
 
-set( SOURCES
-   AgentHost.cpp
-   ArgumentParser.cpp
-   ErrorCodeSync.cpp
-   ClientConnection.cpp
-   ClientInfo.cpp
-   ClientPool.cpp
-   Logger.cpp
-   FindSchemaFile.cpp
-   RewardXML.cpp
-   MissionInitXML.cpp
-   MissionEndedXML.cpp
-   MissionInitSpec.cpp
-   MissionRecord.cpp
-   MissionRecordSpec.cpp
-   MissionSpec.cpp
-   ParameterSet.cpp
-   StringServer.cpp
-   TCPClient.cpp
-   TCPConnection.cpp
-   TCPServer.cpp
-   TimestampedReward.cpp
-   TimestampedString.cpp
-   TimestampedVideoFrame.cpp
-   VideoFrameWriter.cpp
-   BmpFrameWriter.cpp
-   VideoServer.cpp
-   WorldState.cpp
-)
+set(SOURCES
+    AgentHost.cpp
+    ArgumentParser.cpp
+    ErrorCodeSync.cpp
+    ClientConnection.cpp
+    ClientInfo.cpp
+    ClientPool.cpp
+    Logger.cpp
+    FindSchemaFile.cpp
+    RewardXML.cpp
+    MissionInitXML.cpp
+    MissionEndedXML.cpp
+    MissionInitSpec.cpp
+    MissionRecord.cpp
+    MissionRecordSpec.cpp
+    MissionSpec.cpp
+    ParameterSet.cpp
+    StringServer.cpp
+    TCPClient.cpp
+    TCPConnection.cpp
+    TCPServer.cpp
+    TimestampedReward.cpp
+    TimestampedString.cpp
+    TimestampedVideoFrame.cpp
+    VideoFrameWriter.cpp
+    BmpFrameWriter.cpp
+    VideoServer.cpp
+    WorldState.cpp)
 
-set( HEADERS
-   AgentHost.h
-   ArgumentParser.h
-   ErrorCodeSync.h
-   ClientConnection.h
-   ClientInfo.h
-   ClientPool.h
-   Logger.h
-   FindSchemaFile.h
-   XMLParseException.h
-   RewardXML.h
-   MissionInitXML.h
-   MissionEndedXML.h
-   MissionInitSpec.h
-   MissionRecord.h
-   MissionRecordSpec.h
-   MissionSpec.h
-   ParameterSet.h
-   StringServer.h
-   Tarball.hpp
-   TCPClient.h
-   TCPConnection.h
-   TCPServer.h
-   TimestampedUnsignedCharVector.h
-   TimestampedReward.h
-   TimestampedString.h
-   TimestampedVideoFrame.h
-   VideoFrameWriter.h
-   BmpFrameWriter.h
-   VideoServer.h
-   WorldState.h
-)
+set(HEADERS
+    AgentHost.h
+    ArgumentParser.h
+    ErrorCodeSync.h
+    ClientConnection.h
+    ClientInfo.h
+    ClientPool.h
+    Logger.h
+    FindSchemaFile.h
+    XMLParseException.h
+    RewardXML.h
+    MissionInitXML.h
+    MissionEndedXML.h
+    MissionInitSpec.h
+    MissionRecord.h
+    MissionRecordSpec.h
+    MissionSpec.h
+    ParameterSet.h
+    StringServer.h
+    Tarball.hpp
+    TCPClient.h
+    TCPConnection.h
+    TCPServer.h
+    TimestampedUnsignedCharVector.h
+    TimestampedReward.h
+    TimestampedString.h
+    TimestampedVideoFrame.h
+    VideoFrameWriter.h
+    BmpFrameWriter.h
+    VideoServer.h
+    WorldState.h)
 
-if( MSVC )
-  set( SOURCES ${SOURCES} WindowsFrameWriter.cpp )
-  set( HEADERS ${HEADERS} WindowsFrameWriter.h )
+if(MSVC)
+  set(SOURCES ${SOURCES} WindowsFrameWriter.cpp)
+  set(HEADERS ${HEADERS} WindowsFrameWriter.h)
 else()
-  set( SOURCES ${SOURCES} PosixFrameWriter.cpp )
-  set( HEADERS ${HEADERS} PosixFrameWriter.h )
+  set(SOURCES ${SOURCES} PosixFrameWriter.cpp)
+  set(HEADERS ${HEADERS} PosixFrameWriter.h)
 endif()
 
-if ( INCLUDE_ALE )
-  set( SOURCES ${SOURCES} ALEAgentHost.cpp )
-  set( HEADERS ${HEADERS} ALEAgentHost.h )
+if(INCLUDE_ALE)
+  set(SOURCES ${SOURCES} ALEAgentHost.cpp)
+  set(HEADERS ${HEADERS} ALEAgentHost.h)
 endif()
 
-add_definitions( -DMALMO_VERSION=${MALMO_VERSION} )
+add_definitions(-DMALMO_VERSION=${MALMO_VERSION})
 
-set( MALMO_INCLUDE_FOLDERS 
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${Boost_INCLUDE_DIR} 
-    #${CMAKE_CURRENT_BINARY_DIR}
-    ${ZLIB_INCLUDE_DIRS}
-)
-if ( INCLUDE_ALE )
-  set( MALMO_INCLUDE_FOLDERS ${MALMO_INCLUDE_FOLDERS} ${ALE_INCLUDE_DIRS} )
+set(MALMO_INCLUDE_FOLDERS
+    ${CMAKE_CURRENT_SOURCE_DIR} ${Boost_INCLUDE_DIR}
+    # ${CMAKE_CURRENT_BINARY_DIR}
+    ${ZLIB_INCLUDE_DIRS})
+if(INCLUDE_ALE)
+  set(MALMO_INCLUDE_FOLDERS ${MALMO_INCLUDE_FOLDERS} ${ALE_INCLUDE_DIRS})
 endif()
 
-include_directories( ${MALMO_INCLUDE_FOLDERS} )
+include_directories(${MALMO_INCLUDE_FOLDERS})
 
-add_library( Malmo STATIC ${SOURCES} ${HEADERS} )
+add_library(Malmo STATIC ${SOURCES} ${HEADERS})
 
-set( MALMO_LINK_LIBRARIES 
-  ${Boost_LIBRARIES} 
-  ${ZLIB_LIBRARIES}
-)
-if( INCLUDE_ALE )
-  set( MALMO_LINK_LIBRARIES ${MALMO_LINK_LIBRARIES} ${ALE_LIBRARIES} )
+set(MALMO_LINK_LIBRARIES ${Boost_LIBRARIES} ${ZLIB_LIBRARIES})
+if(INCLUDE_ALE)
+  set(MALMO_LINK_LIBRARIES ${MALMO_LINK_LIBRARIES} ${ALE_LIBRARIES})
 endif()
-if( UNIX AND NOT APPLE )
-  set( MALMO_LINK_LIBRARIES ${MALMO_LINK_LIBRARIES} rt )
+if(UNIX AND NOT APPLE)
+  set(MALMO_LINK_LIBRARIES ${MALMO_LINK_LIBRARIES} rt)
 endif()
-if( NOT WIN32 )
-  set( MALMO_LINK_LIBRARIES ${MALMO_LINK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} )
+if(NOT WIN32)
+  set(MALMO_LINK_LIBRARIES ${MALMO_LINK_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 endif()
 
-target_link_libraries( Malmo PRIVATE ${MALMO_LINK_LIBRARIES} )
+target_link_libraries(Malmo PRIVATE ${MALMO_LINK_LIBRARIES})
 
 # -------------- Install the library in Cpp_Examples --------------
 
-install( FILES ${HEADERS} DESTINATION Cpp_Examples/include )
-install( TARGETS Malmo DESTINATION Cpp_Examples/lib )
+install(FILES ${HEADERS} DESTINATION include/malmo)
+install(TARGETS Malmo DESTINATION lib)
 
 # -------------------- Walk the subdirectories --------------------
-if( INCLUDE_CSHARP )
-  add_subdirectory( CSharpWrapper )
+if(INCLUDE_CSHARP)
+  add_subdirectory(CSharpWrapper)
 endif()
-if( INCLUDE_JAVA )
-  add_subdirectory( JavaWrapper )
+if(INCLUDE_JAVA)
+  add_subdirectory(JavaWrapper)
 endif()
-if( INCLUDE_PYTHON )
-  add_subdirectory( PythonWrapper )
+if(INCLUDE_PYTHON)
+  add_subdirectory(PythonWrapper)
 endif()
