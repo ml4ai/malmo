@@ -246,7 +246,8 @@ endif()
 
 include( CTest )
 
-set( CMAKE_INSTALL_PREFIX "install" ) # useful for testing the sample scripts
+# Useful for testing the sample scripts
+set( CMAKE_INSTALL_PREFIX "install" ) 
 
 # -------------------- Walk the subdirectories --------------------
 
